@@ -1,0 +1,34 @@
+managed implementation in class zbp_i_wh_warehouse unique;
+strict ( 2 );
+
+define behavior for ZI_WH_Warehouse alias Warehouse
+persistent table zwh_whouse
+lock master
+etag master LocalLastChangedAt
+authorization master ( instance )
+{
+  create;
+  update;
+  delete;
+
+  association _StockItems { create; }
+
+  field ( numbering : managed, readonly ) WarehouseUUID;
+  field ( readonly ) CreatedBy, CreatedAt, LastChangedBy, LastChangedAt, LocalLastChangedAt;
+}
+
+define behavior for ZI_WH_StockItem alias StockItem
+persistent table zwh_stock
+lock dependent by _Warehouse
+etag master LocalLastChangedAt
+authorization dependent by _Warehouse
+{
+  create;
+  update;
+  delete;
+
+  association _Warehouse;
+
+  field ( numbering : managed, readonly ) StockUUID;
+  field ( readonly ) CreatedBy, CreatedAt, LastChangedBy, LastChangedAt, LocalLastChangedAt;
+}
