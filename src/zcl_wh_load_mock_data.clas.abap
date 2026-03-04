@@ -4,11 +4,12 @@ CLASS zcl_wh_load_mock_data DEFINITION
   CREATE PUBLIC.
 
   PUBLIC SECTION.
-    INTERFACES if_oo_adt_classrun.
+    CLASS-METHODS load
+      RETURNING VALUE(rv_message) TYPE string.
 ENDCLASS.
 
 CLASS zcl_wh_load_mock_data IMPLEMENTATION.
-  METHOD if_oo_adt_classrun~main.
+  METHOD load.
     DATA: lt_wh    TYPE STANDARD TABLE OF zwh_whouse,
           lt_stock TYPE STANDARD TABLE OF zwh_stock.
 
@@ -60,8 +61,6 @@ CLASS zcl_wh_load_mock_data IMPLEMENTATION.
 
     INSERT zwh_stock FROM TABLE @lt_stock.
     COMMIT WORK.
-
-    out->write( |Warehouses loaded: { lines( lt_wh ) }| ).
-    out->write( |Stock items loaded: { lines( lt_stock ) }| ).
+    rv_message = |Warehouses loaded: { lines( lt_wh ) }, Stock items loaded: { lines( lt_stock ) }|.
   ENDMETHOD.
 ENDCLASS.
